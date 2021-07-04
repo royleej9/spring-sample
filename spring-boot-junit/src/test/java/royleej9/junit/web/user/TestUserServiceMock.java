@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
-public class UserServiceMockTest {
+public class TestUserServiceMock {
 
     // https://www.baeldung.com/mockito-annotations
     @Mock

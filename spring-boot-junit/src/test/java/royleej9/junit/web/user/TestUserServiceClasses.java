@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @AutoConfigureMybatis
 @SpringBootTest(classes= {UserService.class})
 @TestPropertySource("classpath:application-test.properties")
-public class UserServiceClassesTest {
+public class TestUserServiceClasses {
 
     // https://stackoverflow.com/questions/6275785/wrapping-chained-method-calls-on-a-separate-line-in-eclipse-for-java
 

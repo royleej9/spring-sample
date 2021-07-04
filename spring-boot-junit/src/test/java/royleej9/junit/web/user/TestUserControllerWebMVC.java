@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SpringBootTest
 @WebMvcTest(UserController.class)
-public class UserControllerWebMVCTest {
+public class TestUserControllerWebMVC {
 
     @MockBean
     private UserService userService;

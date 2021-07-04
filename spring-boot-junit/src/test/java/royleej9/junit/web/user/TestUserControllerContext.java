@@ -15,16 +15,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+import royleej9.junit.web.user.config.TestUserConfig;
 
 /*-
  * @SpringBootTest /@AutoConfigureMockMvc 
- * - 테스트 대상을 포함한 전체 bean을 스캔함- 시간이 많이 걸림
+ * - 사용하기 간단한 테스트 방법
+ * - @ContextConfiguration을 사용하여 환경 설정을 별도 java 파일로 정의
+ * - ComponentScan을 사용하여 스캔 범위 지정
  * 
  * @author royleej9
  * @param <O>
@@ -33,7 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+@ContextConfiguration(classes = TestUserConfig.class)
+public class TestUserControllerContext {
     @Autowired
     private MockMvc mockMvc;
 
@@ -64,8 +69,8 @@ public class UserControllerTest {
     public void testGetUsers() throws Exception {
         // when // then
         // @formatter:off
-        this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk())
+        this.mockMvc.perform(get("/users")
+                    .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(1)))
                     .andDo(print());
     }
@@ -77,8 +82,7 @@ public class UserControllerTest {
         MvcResult result = this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
                                        .andExpect(status().isOk())
                                        .andExpect(jsonPath("$", hasSize(1)))
-                                       .andDo(print())
-                                       .andReturn();
+                                       .andDo(print()).andReturn();
 
         String stringResult = result.getResponse().getContentAsString();
         log.info(stringResult);

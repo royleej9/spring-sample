@@ -11,10 +11,7 @@ import java.sql.Timestamp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -27,19 +24,16 @@ import lombok.extern.slf4j.Slf4j;
 
 /*-
  * @SpringBootTest /@AutoConfigureMockMvc 
- * 테스트에 필요한 class를 지정함 / 전체를 스캔하지 않음
+ * - 테스트 대상을 포함한 전체 bean을 스캔함- 시간이 많이 걸림
  * 
  * @author royleej9
  * @param <O>
  *
  */
 @Slf4j
-@MapperScan("royleej9.junit.web.user")
-@AutoConfigureMybatis
-@EnableAutoConfiguration
-@SpringBootTest(classes= {UserController.class, UserService.class})
+@SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerClassesTest {
+public class TestUserController {
     @Autowired
     private MockMvc mockMvc;
 
@@ -53,11 +47,11 @@ public class UserControllerClassesTest {
                            .createdDate(new Timestamp(System.currentTimeMillis()))
                            .build();
     // @formatter:on
-    
+
     @BeforeEach
     public void setup() throws Exception {
         String param = objectMapper.writeValueAsString(user1);
-        
+
         // @formatter:off
         this.mockMvc.perform(post("/users")
                     .contentType(MediaType.APPLICATION_JSON).content(param))

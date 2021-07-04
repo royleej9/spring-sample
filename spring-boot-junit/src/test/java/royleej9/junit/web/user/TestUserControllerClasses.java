@@ -11,34 +11,35 @@ import java.sql.Timestamp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
-import royleej9.junit.web.user.config.TestUserConfig;
 
 /*-
  * @SpringBootTest /@AutoConfigureMockMvc 
- * - 사용하기 간단한 테스트 방법
- * - @ContextConfiguration을 사용하여 환경 설정을 별도 java 파일로 정의
- * - ComponentScan을 사용하여 스캔 범위 지정
+ * 테스트에 필요한 class를 지정함 / 전체를 스캔하지 않음
  * 
  * @author royleej9
  * @param <O>
  *
  */
 @Slf4j
-@SpringBootTest
+@MapperScan("royleej9.junit.web.user")
+@AutoConfigureMybatis
+@EnableAutoConfiguration
+@SpringBootTest(classes= {UserController.class, UserService.class})
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = TestUserConfig.class)
-public class UserControllerContextTest {
+public class TestUserControllerClasses {
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,11 +53,11 @@ public class UserControllerContextTest {
                            .createdDate(new Timestamp(System.currentTimeMillis()))
                            .build();
     // @formatter:on
-
+    
     @BeforeEach
     public void setup() throws Exception {
         String param = objectMapper.writeValueAsString(user1);
-
+        
         // @formatter:off
         this.mockMvc.perform(post("/users")
                     .contentType(MediaType.APPLICATION_JSON).content(param))
@@ -69,8 +70,8 @@ public class UserControllerContextTest {
     public void testGetUsers() throws Exception {
         // when // then
         // @formatter:off
-        this.mockMvc.perform(get("/users")
-                    .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+        this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
                     .andExpect(jsonPath("$", hasSize(1)))
                     .andDo(print());
     }
@@ -82,7 +83,8 @@ public class UserControllerContextTest {
         MvcResult result = this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
                                        .andExpect(status().isOk())
                                        .andExpect(jsonPath("$", hasSize(1)))
-                                       .andDo(print()).andReturn();
+                                       .andDo(print())
+                                       .andReturn();
 
         String stringResult = result.getResponse().getContentAsString();
         log.info(stringResult);
