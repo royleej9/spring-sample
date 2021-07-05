@@ -19,11 +19,10 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +33,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @ExtendWith(MockitoExtension.class)
-@RunWith(JUnitPlatform.class)
+//@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
 public class TestUserServiceBDD {
 
     // https://www.baeldung.com/mockito-annotations

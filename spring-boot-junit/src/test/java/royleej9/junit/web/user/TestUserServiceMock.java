@@ -2,8 +2,8 @@ package royleej9.junit.web.user;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -17,11 +17,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.runner.JUnitPlatform;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @ExtendWith(MockitoExtension.class)
-@RunWith(JUnitPlatform.class)
+//@RunWith(JUnitPlatform.class)
+@ExtendWith(SpringExtension.class)
 public class TestUserServiceMock {
 
     // https://www.baeldung.com/mockito-annotations
