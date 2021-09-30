@@ -17,13 +17,14 @@ public class CBController {
 	@Autowired
 	private CBService cbService;
 
-	@GetMapping("/timeout/timeoutLocal/{delay}/{faultPercent}")
-	public Mono<String> timeoutLocal(@PathVariable int delay, @PathVariable int faultPercent) {
-		return cbService.timeoutLocal(delay, faultPercent);
+	// Reactive 스타일이 아닌 경우
+	@GetMapping("/timeout/non-reactive/{delay}/{faultPercent}")
+	public CompletableFuture<String> timeoutNonReactive(@PathVariable int delay, @PathVariable int faultPercent) {
+		return cbService.timeoutNonReactive(delay, faultPercent);
 	}
 
-	@GetMapping("/timeout/remote-service/{delay}/{faultPercent}")
-	public CompletableFuture<String> timeoutRemoteService(@PathVariable int delay, @PathVariable int faultPercent) {
-		return cbService.timeoutRemoteService(delay, faultPercent);
+	@GetMapping("/timeout/reactive/{delay}/{faultPercent}")
+	public Mono<String> timeoutReactive(@PathVariable int delay, @PathVariable int faultPercent) {
+		return cbService.timeoutReactive(delay, faultPercent);
 	}
 }

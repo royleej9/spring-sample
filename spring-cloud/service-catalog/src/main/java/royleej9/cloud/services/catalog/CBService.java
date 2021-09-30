@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
@@ -21,6 +22,9 @@ public class CBService {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Autowired
+	private WebClient.Builder webClientBuilder;
+
 	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallback")
 	public String testCircuitBreaker(String customerId) {
 		List a = null;
@@ -29,20 +33,20 @@ public class CBService {
 	}
 
 	@TimeLimiter(name = CB_SERVICE)
-	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackLocalServiceTimeLimiter")
-	public Mono<String> timeoutLocal(int delay, int faultPercent) {
-		sleep(delay * 1000);
-		return Mono.just("Test-timeoutLocal");
+	@Bulkhead(name = CB_SERVICE, type = Type.THREADPOOL)
+	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackNonReactiveTimeLimiter")
+	public CompletableFuture<String> timeoutNonReactive(int delay, int faultPercent) {
+		String url = "http://customer-api/customers/retry/" + delay + "/" + faultPercent;
+		String result = restTemplate.getForObject(url, String.class);
+		return CompletableFuture.completedFuture(result);
 	}
 
 	@TimeLimiter(name = CB_SERVICE)
-	@Bulkhead(name = CB_SERVICE, type = Type.THREADPOOL)
-	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackRemoteServiceTimeLimiter")
-	public CompletableFuture<String> timeoutRemoteService(int delay, int faultPercent) {
+	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackReactiveTimeLimiter")
+	public Mono<String> timeoutReactive(int delay, int faultPercent) {
 		String url = "http://customer-api/customers/retry/" + delay + "/" + faultPercent;
-		String result = restTemplate.getForObject(url, String.class);
-
-		return CompletableFuture.completedFuture(result);
+		return webClientBuilder.build().get().uri(url).retrieve().bodyToMono(String.class)
+				.map(greeting -> String.format("%s", greeting));
 	}
 
 	// @CircuitBreaker 실패시 호출되는 메소드
@@ -59,28 +63,22 @@ public class CBService {
 		return "Failed to call api - Exception" + System.currentTimeMillis();
 	}
 
+	// @CircuitBreaker 실패시 호출되는 메소드
+	@SuppressWarnings("unused")
 	private String fallback(String customerId, RuntimeException e) {
 		return "time-out" + System.currentTimeMillis();
 	}
 
-	private Mono<String> fallbackLocalServiceTimeLimiter(int delay, int faultPercent, Exception ex) {
-		System.out.println("fallbackLocalServiceTimeLimiter" + System.currentTimeMillis());
-		return Mono.just("fallbackLocalServiceTimeLimiter" + System.currentTimeMillis());
-	}
-
-	private CompletableFuture<String> fallbackRemoteServiceTimeLimiter(int delay, int faultPercent, Exception ex) {
-		System.out.println("CompletableFuture-fallbackRemoteServiceTimeLimiter" + System.currentTimeMillis());
+	// @TimeLimiter 실패시 호출되는 메소드
+	@SuppressWarnings("unused")
+	private CompletableFuture<String> fallbackNonReactiveTimeLimiter(int delay, int faultPercent, Exception ex) {
 		return CompletableFuture
-				.completedFuture("CompletableFuture-fallbackRemoteServiceTimeLimiter" + System.currentTimeMillis());
+				.completedFuture("CompletableFuture-fallbackNonReactiveTimeLimiter" + System.currentTimeMillis());
 	}
 
-	private void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	// @TimeLimiter 실패시 호출되는 메소드
+	@SuppressWarnings("unused")
+	private Mono<String> fallbackReactiveTimeLimiter(int delay, int faultPercent, Exception ex) {
+		return Mono.just("fallbackReactiveTimeLimiter" + System.currentTimeMillis());
 	}
 }

@@ -58,7 +58,7 @@ management:
 resilience4j.timelimiter:
   configs:
     default:
-      timeoutDuration: 2s
+      timeoutDuration: 3s
       cancelRunningFuture: true
   instances:
     customerService:
