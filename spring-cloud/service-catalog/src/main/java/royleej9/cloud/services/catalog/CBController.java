@@ -17,12 +17,19 @@ public class CBController {
 	@Autowired
 	private CBService cbService;
 
-	// Reactive 스타일이 아닌 경우
+	// timeout-Reactive 스타일이 아닌 경우
+	@GetMapping("/testError/{customerId}")
+	public String testError(@PathVariable int customerId) {
+		return cbService.testError(customerId);
+	}
+
+	// timeout-Reactive 스타일이 아닌 경우
 	@GetMapping("/timeout/non-reactive/{delay}/{faultPercent}")
 	public CompletableFuture<String> timeoutNonReactive(@PathVariable int delay, @PathVariable int faultPercent) {
 		return cbService.timeoutNonReactive(delay, faultPercent);
 	}
 
+	// timeout-Reactive 스타일이 경우
 	@GetMapping("/timeout/reactive/{delay}/{faultPercent}")
 	public Mono<String> timeoutReactive(@PathVariable int delay, @PathVariable int faultPercent) {
 		return cbService.timeoutReactive(delay, faultPercent);

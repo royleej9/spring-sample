@@ -26,16 +26,21 @@ public class CBService {
 	private WebClient.Builder webClientBuilder;
 
 	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallback")
-	public String testCircuitBreaker(String customerId) {
-		List a = null;
-		a.get(10);
-		return restTemplate.getForObject("http://fall-api/customers/" + customerId, String.class);
+	public String testError(int customerId) {
+		System.out.println("testError");
+		if (customerId > 5) {
+			List a = null;
+			a.get(10);
+		}
+//		return restTemplate.getForObject("http://fall-api/customers/" + customerId, String.class);
+		return "success!!!!";
 	}
 
 	@TimeLimiter(name = CB_SERVICE)
 	@Bulkhead(name = CB_SERVICE, type = Type.THREADPOOL)
 	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackNonReactiveTimeLimiter")
 	public CompletableFuture<String> timeoutNonReactive(int delay, int faultPercent) {
+		System.out.println("timeoutNonReactive");
 		String url = "http://customer-api/customers/retry/" + delay + "/" + faultPercent;
 		String result = restTemplate.getForObject(url, String.class);
 		return CompletableFuture.completedFuture(result);
@@ -44,6 +49,7 @@ public class CBService {
 	@TimeLimiter(name = CB_SERVICE)
 	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackReactiveTimeLimiter")
 	public Mono<String> timeoutReactive(int delay, int faultPercent) {
+		System.out.println("timeoutReactive");
 		String url = "http://customer-api/customers/retry/" + delay + "/" + faultPercent;
 		return webClientBuilder.build().get().uri(url).retrieve().bodyToMono(String.class)
 				.map(greeting -> String.format("%s", greeting));
@@ -51,22 +57,26 @@ public class CBService {
 
 	// @CircuitBreaker 실패시 호출되는 메소드
 	@SuppressWarnings("unused")
-	private String fallback(String customerId, IllegalStateException ex) {
-		System.out.println("IllegalStateException" + System.currentTimeMillis());
-		return "Failed to call api - IllegalStateException" + System.currentTimeMillis();
+	private String fallback(int customerId, IllegalStateException ex) {
+		String message = "fallback-IllegalStateException: " + ex.getMessage() + System.currentTimeMillis();
+		System.out.println(message);
+		return message;
 	}
 
 	// @CircuitBreaker 실패시 호출되는 메소드
 	@SuppressWarnings("unused")
-	private String fallback(String customerId, Exception ex) {
-		System.out.println("Exception" + System.currentTimeMillis());
-		return "Failed to call api - Exception" + System.currentTimeMillis();
+	private String fallback(int customerId, Exception ex) {
+		String message = "fallback-Exception: " + ex.getMessage() + System.currentTimeMillis();
+		System.out.println(message);
+		return message;
 	}
 
 	// @CircuitBreaker 실패시 호출되는 메소드
 	@SuppressWarnings("unused")
-	private String fallback(String customerId, RuntimeException e) {
-		return "time-out" + System.currentTimeMillis();
+	private String fallback(int customerId, RuntimeException ex) {
+		String message = "fallback-RuntimeException: " + ex.getMessage() + System.currentTimeMillis();
+		System.out.println(message);
+		return message;
 	}
 
 	// @TimeLimiter 실패시 호출되는 메소드

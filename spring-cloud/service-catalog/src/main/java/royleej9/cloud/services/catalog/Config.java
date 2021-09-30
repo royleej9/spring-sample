@@ -7,6 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.core.registry.EntryAddedEvent;
+import io.github.resilience4j.core.registry.EntryRemovedEvent;
+import io.github.resilience4j.core.registry.EntryReplacedEvent;
+import io.github.resilience4j.core.registry.RegistryEventConsumer;
+
 @Configuration
 @LoadBalancerClient(value = "customer", configuration = CustomLoadBalancerConfiguration.class)
 public class Config {
@@ -22,26 +28,29 @@ public class Config {
 		return WebClient.builder();
 	}
 
-//	@Bean
-//	public RegistryEventConsumer<CircuitBreaker> myRegistryEventConsumer() {
-//
-//		return new RegistryEventConsumer<CircuitBreaker>() {
-//			@Override
-//			public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
-//				entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> System.out.println(event.toString()));
-//			}
-//
-//			@Override
-//			public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
-//
-//			}
-//
-//			@Override
-//			public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
-//
-//			}
-//		};
-//	}
+	@Bean
+	public RegistryEventConsumer<CircuitBreaker> myRegistryEventConsumer() {
+
+		return new RegistryEventConsumer<CircuitBreaker>() {
+			@Override
+			public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
+				entryAddedEvent.getAddedEntry().getEventPublisher()
+						.onEvent(event -> {
+							System.out.println(event.toString());
+						});
+			}
+
+			@Override
+			public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
+
+			}
+
+			@Override
+			public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
+
+			}
+		};
+	}
 //
 //	@Bean
 //	public RegistryEventConsumer<Retry> myRetryRegistryEventConsumer() {
