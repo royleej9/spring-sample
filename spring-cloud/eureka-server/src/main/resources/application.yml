@@ -1,0 +1,88 @@
+# default
+#spring:
+#  application:
+#    name: eureka-server
+
+server:
+  address: 127.0.0.1
+  port: 8761
+
+eureka:
+  instance:
+    appname: eureka-server
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.56.1:8761/eureka, http://172.23.32.1:8762/eureka, http://172.28.96.1:8763/eureka
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - '*'      
+---
+# Standalone Mode
+spring:  
+  config:
+    activate:
+      on-profile: standalone
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${server.address}
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka
+  server:
+    wait-time-in-ms-when-sync-empty: 5
+
+---
+# eureka-server-1
+spring:  
+  config:
+    activate:
+      on-profile: eureka-server-1
+
+server:
+  address: 192.168.56.1
+  port: 8761
+  
+eureka:
+  instance:
+    ip-address: ${server.address}
+#    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+    hostname: eureka-server-1
+---
+# eureka-server-2
+spring:  
+  config:
+    activate:
+      on-profile: eureka-server-2
+      
+server:
+  address: 172.23.32.1
+  port: 8762
+  
+eureka:
+  instance:
+    ip-address: ${server.address}
+    hostname: eureka-server-2
+---
+# eureka-server-3
+spring:  
+  config:
+    activate:
+      on-profile: eureka-server-3
+
+server:
+  address: 172.28.96.1
+  port: 8763
+
+eureka:
+  instance:
+    ip-address: ${server.address}
+    hostname: eureka-server-3

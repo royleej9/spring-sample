@@ -1,0 +1,53 @@
+server:
+  address: 127.0.0.1
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - '*'
+  endpoint:
+    gateway:
+      enabled: true
+
+eureka:
+  instance:
+    appname: gateway
+    prefer-ip-address: true
+    ip-address: ${server.address}
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.56.1:8761/eureka, http://172.23.32.1:8762/eureka, http://172.28.96.1:8763/eureka
+
+spring:
+  cloud:
+    gateway:
+#      default-filters:
+#        - PrefixPath=/api
+#      discovery:
+#        locator:
+#          enabled: true
+#          lower-case-service-id: true
+#          include-expression: metadata['isAutoIncludeGateway'] == 'true'
+      routes:
+      - id: catalog-api
+        uri: lb://CATALOG-API
+        predicates:
+          - Path=/catalogs/**
+        filters:
+        - PrefixPath=/api
+
+
+      
+---
+spring:
+  config:
+    activate:
+      on-profile: standalone
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka    

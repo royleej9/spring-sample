@@ -1,0 +1,127 @@
+server:
+  address: 127.0.0.1
+  port: 8081
+
+spring:
+  application:
+    name: catalog-api
+  cloud:
+    loadbalancer:
+      configurations: request-based-sticky-session
+      sticky-session:
+        add-service-instance-cookie: true
+      stats:
+        micrometer:
+          enabled: true
+
+eureka:
+  instance:
+    appname: catalog-api
+    prefer-ip-address: true
+    ip-address: ${server.address}
+    metadata-map:
+      isAutoIncludeGateway: 'false'
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.56.1:8761/eureka, http://172.23.32.1:8762/eureka, http://172.28.96.1:8763/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - '*'
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
+
+#resilience4j.circuitbreaker:
+#  configs:
+#    default:
+##      slidingWindowSize: 100
+##      permittedNumberOfCallsInHalfOpenState: 10
+##      waitDurationInOpenState: 10000
+##      failureRateThreshold: 60
+##      eventConsumerBufferSize: 10
+#      registerHealthIndicator: true
+##    someShared:
+##      slidingWindowSize: 50
+##      permittedNumberOfCallsInHalfOpenState: 10
+#  instances:
+#    customerService:
+#      baseConfig: default
+##      waitDurationInOpenState: 5000
+#
+resilience4j.timelimiter:
+  configs:
+    default:
+      timeoutDuration: 2s
+      cancelRunningFuture: true
+  instances:
+    customerService:
+      baseConfig: default      
+    cbService:
+      baseConfig: default
+      
+resilience4j.bulkhead:
+  configs:
+    default:
+      maxConcurrentCalls: 5
+      maxWaitDuration: 0
+  instances:
+    cbService:
+      baseConfig: default      
+      
+
+#resilience4j.ratelimiter:
+#  configs:
+#    default:
+#      registerHealthIndicator: true      
+
+
+
+
+
+
+
+#ribbon:
+#  eureka:
+#    enabled: true
+    
+#customer:
+#  ribbon:
+#    listOfServers: localhost:8085
+---
+# standalone
+spring:
+  config:
+    activate:
+      on-profile: standalone
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka      
+---
+# catalog-1
+server:
+  port: 8081
+
+spring:  
+  config:
+    activate:
+      on-profile: catalog-1
+---
+# catalog-2
+server:
+  port: 8082
+
+spring:  
+  config:
+    activate:
+      on-profile: catalog-2
+
+  
