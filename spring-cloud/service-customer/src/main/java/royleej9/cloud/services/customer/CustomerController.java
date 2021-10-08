@@ -23,34 +23,6 @@ public class CustomerController {
 				System.currentTimeMillis());
 	}
 
-	@GetMapping("/retry/{delay}/{faultPercent}")
-	public String retry(@PathVariable int delay, @PathVariable int faultPercent) {
-		System.out.println("retry :" + delay + "/" + faultPercent);
-
-		if (delay > 0)
-			sleep(delay * 1000);
-
-		return String.format("[customer-timeout][%s][delay id = %s at %s ]", getServerInfo(), delay,
-				System.currentTimeMillis());
-	}
-
-//	public String testTimeout(int delay, int faultPercent) {
-//
-////		if (faultPercent < )
-//
-//		return "timeout-test";
-//	}
-
-	private void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 	private String getServerInfo() {
 		return serverProperties.getAddress().toString() + ":" + serverProperties.getPort();
 	}

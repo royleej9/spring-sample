@@ -5,7 +5,7 @@ eureka:
     prefer-ip-address: true
   client:
     serviceUrl:
-      defaultZone: http://180.237.10.240:8761/eureka, http://172.27.128.1:8762/eureka/, http://200.100.1.126:8763/eureka/
+      defaultZone: http://192.168.56.1:8761/eureka, , http://192.168.119.1:8762/eureka, http://192.168.149.1:8763/eureka
 
 ---
 # Standalone Mode
@@ -37,7 +37,7 @@ spring:
 eureka:
   instance:
     hostname: peer-1
-    ip-address: 180.237.10.240
+    ip-address: 192.168.56.1
     
 ---
 # peer-2
@@ -50,7 +50,7 @@ spring:
 eureka:
   instance:
     hostname: peer-2
-    ip-address: 172.27.128.1
+    ip-address: 192.168.119.1
 
 ---
 # peer-3
@@ -63,4 +63,4 @@ spring:
 eureka:
   instance:
     hostname: peer-3
-    ip-address: 200.100.1.126
+    ip-address: 192.168.149.1

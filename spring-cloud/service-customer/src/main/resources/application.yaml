@@ -9,22 +9,12 @@ spring:
 
 eureka:
   instance:
-    appname: customer-api
     prefer-ip-address: true
     ip-address: ${server.address}
-    metadata-map:
-      isAutoIncludeGateway: 'true'
   client:
     serviceUrl:     
-      defaultZone: http://192.168.56.1:8761/eureka, http://172.23.32.1:8762/eureka, http://172.28.96.1:8763/eureka
+      defaultZone: http://192.168.56.1:8761/eureka, http://192.168.119.1:8762/eureka, http://192.168.149.1:8763/eureka
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-        - '*'
-        
 ---
 #standalone
 spring:  
@@ -36,7 +26,7 @@ eureka:
   client:
     order: 0
     serviceUrl:
-      defaultZone: http://127.0.0.1:8761/eureka
+      defaultZone: http://192.168.56.1:8761/eureka
       
 ---
 # customer-1

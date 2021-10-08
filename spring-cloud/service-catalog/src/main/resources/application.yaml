@@ -5,67 +5,28 @@ server:
 spring:
   application:
     name: catalog-api
-  cloud:
-    loadbalancer:
-      configurations: request-based-sticky-session
-      sticky-session:
-        add-service-instance-cookie: true
-      stats:
-        micrometer:
-          enabled: true
 
 eureka:
   instance:
-    appname: catalog-api
     prefer-ip-address: true
     ip-address: ${server.address}
-    metadata-map:
-      isAutoIncludeGateway: 'false'
   client:
     serviceUrl:
-      defaultZone: http://192.168.56.1:8761/eureka, http://172.23.32.1:8762/eureka, http://172.28.96.1:8763/eureka
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-        - '*'
-  health:
-    circuitbreakers:
-      enabled: true
-    ratelimiters:
-      enabled: true
-
+      defaultZone: http://192.168.56.1:8761/eureka, http://192.168.119.1:8762/eureka, http://192.168.149.1:8763/eureka
 
 resilience4j.circuitbreaker:
   configs:
     default:
-      slidingWindowType: COUNT_BASED
-#      slidingWindowSize: 100  
+      slidingWindowType: COUNT_BASED 
       failureRateThreshold: 50 
-#      slowCallRateThreshold: 1
       slidingWindowSize: 3
       waitDurationInOpenState: 5000 # OPEN > Half-Open 상태로 변경되기전 기다리는 시간 / 변경전 까지 호출 실패/ 지정된 시간을 넘어서 호출이 있을때 HALF_OPEN으로 변경
-#      automaticTransitionFromOpenToHalfOpenEnabled: true
-      
-      # Half-Open 상태일때 허용되는 호출 수 / 실패율을 넘으면 다시 Open 낮으면 Close
       permittedNumberOfCallsInHalfOpenState: 10
-      
-#      minimumNumberOfCalls: 2 # 실패율을 계산할때 필요한 최소한의 호출 수 slidingWindowSize보다 커야 함
       maxWaitDurationInHalfOpenState: 5000
-      
-#      permittedNumberOfCallsInHalfOpenState: 10
-#      waitDurationInOpenState: 10000
-#      eventConsumerBufferSize: 10
       registerHealthIndicator: true
-#    someShared:
-#      slidingWindowSize: 50
-#      permittedNumberOfCallsInHalfOpenState: 10
   instances:
     customerService:
       baseConfig: default
-#      waitDurationInOpenState: 5000
 
 resilience4j.timelimiter:
   configs:
@@ -85,27 +46,7 @@ resilience4j.bulkhead:
       maxWaitDuration: 0
   instances:
     cbService:
-      baseConfig: default      
-      
-
-#resilience4j.ratelimiter:
-#  configs:
-#    default:
-#      registerHealthIndicator: true      
-
-
-
-
-
-
-
-#ribbon:
-#  eureka:
-#    enabled: true
-    
-#customer:
-#  ribbon:
-#    listOfServers: localhost:8085
+      baseConfig: default
 ---
 # standalone
 spring:
