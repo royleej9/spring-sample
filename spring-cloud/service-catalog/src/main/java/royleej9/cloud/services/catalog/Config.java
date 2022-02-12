@@ -5,7 +5,6 @@ import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.core.registry.EntryAddedEvent;
@@ -22,11 +21,11 @@ public class Config {
 		return new RestTemplate();
 	}
 
-	@LoadBalanced
-	@Bean
-	WebClient.Builder webClientBuilder() {
-		return WebClient.builder();
-	}
+//	@LoadBalanced
+//	@Bean
+//	WebClient.Builder webClientBuilder() {
+//		return WebClient.builder();
+//	}
 
 	@Bean
 	public RegistryEventConsumer<CircuitBreaker> myRegistryEventConsumer() {

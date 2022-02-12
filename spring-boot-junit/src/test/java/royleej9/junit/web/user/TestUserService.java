@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest
 //@TestPropertySource("classpath:application-test.properties")
 @Transactional
-public class TestUserService {
+class TestUserService {
 
     // https://stackoverflow.com/questions/6275785/wrapping-chained-method-calls-on-a-separate-line-in-eclipse-for-java
 
@@ -66,7 +66,7 @@ public class TestUserService {
     }
 
     @Test
-    public void testGet() throws Exception {
+    void testGet() throws Exception {
         log.info("test getUsers");
         final User user = User.builder().build();
         final List<User> users = userService.getUsers(user);
@@ -74,7 +74,7 @@ public class TestUserService {
     }
 
     @Test
-    public void testGetById() throws Exception {
+    void testGetById() throws Exception {
         log.info("test getUsers by id");
         final User user = User.builder().id("id1").build();
         final List<User> users = userService.getUsers(user);
@@ -83,7 +83,7 @@ public class TestUserService {
     }
 
     @Test
-    public void testInsert() throws Exception {
+    void testInsert() throws Exception {
         final boolean isAdded1 = userService.insertUser(user1);
         assertFalse(isAdded1);
 
@@ -98,7 +98,7 @@ public class TestUserService {
     }
 
     @Test
-    public void testDelete() {
+    void testDelete() {
 
         // when
         userService.deleteUser(user1.getId());
@@ -110,7 +110,7 @@ public class TestUserService {
     }
 
     @Test
-    public void testUpdate() {
+    void testUpdate() {
 
         // given
         final User updatedUser1 = User.builder()

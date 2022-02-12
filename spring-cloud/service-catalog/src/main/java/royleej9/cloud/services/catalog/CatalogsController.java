@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/catalogs/customerinfo")
+@RequestMapping("/catalogs/customerinfo")
 public class CatalogsController {
 
 	@Autowired
@@ -26,6 +26,16 @@ public class CatalogsController {
 				System.currentTimeMillis(), customerInfo);
 	}
 
+	@GetMapping(path = "/delay/{delay}")
+	public String getCustomerInfoDelay(@PathVariable int delay) {
+		System.out.println("before-response delay : " + delay);
+		String customerInfo = customerApiService.getCustomerInfoDelay(delay);
+		System.out.println("after-response delay : " + delay);
+
+		return String.format("[catalogs-delay][%s][delay = %s at %s %s ]", getServerInfo(), delay,
+				System.currentTimeMillis(), customerInfo);
+	}
+	
 
 	@GetMapping(path = "/raw/{customerId}")
 	public String getCustomerInfoRww(@PathVariable String customerId) {

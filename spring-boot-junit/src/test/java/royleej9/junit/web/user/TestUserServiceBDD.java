@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @ExtendWith(MockitoExtension.class)
 //@RunWith(JUnitPlatform.class)
 @ExtendWith(SpringExtension.class)
-public class TestUserServiceBDD {
+class TestUserServiceBDD {
 
     // https://www.baeldung.com/mockito-annotations
 
@@ -111,14 +111,14 @@ public class TestUserServiceBDD {
 
 
     @Test
-    public void testGetUserInfo1() throws Exception {
+    void testGetUserInfo1() throws Exception {
         log.info("testGetUserInfo1");
 
         doReturn(Arrays.asList(user1)).when(userMapper).getUsers(user1);
 
         final List<User> users = userService.getUsers(user1);
         assertThat(users.size(), is(1));
-        assertTrue(users.get(0).getId().equals(user1.getId()));
+        assertEquals(user1.getId(), users.get(0).getId());
     }
 
 //    @Test
@@ -130,7 +130,7 @@ public class TestUserServiceBDD {
 //    }
 
     @Test
-    public void testInsertUser() throws Exception {
+    void testInsertUser() throws Exception {
         log.info("testInsertUser");
         
         // given
@@ -145,7 +145,7 @@ public class TestUserServiceBDD {
     }
 
     @Test
-    public void testInsertUserDupli() throws Exception {
+    void testInsertUserDupli() throws Exception {
         log.info("testInsertUserDupli");
         final boolean isAdded = userService.insertUser(user1);
         assertFalse(isAdded);

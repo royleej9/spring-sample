@@ -22,6 +22,14 @@ public class CustomerController {
 		return String.format("[customer][%s][Customer id = %s at %s ]", getServerInfo(), customerId,
 				System.currentTimeMillis());
 	}
+	
+	@GetMapping("/delay/{delay}")
+	public String getCustomerInfoDelay(@PathVariable int delay) {
+		System.out.println("request delay :" + delay);
+		sleep(delay * 1000);
+		return String.format("[customer-delay][%s][delay = %s at %s ]", getServerInfo(), delay,
+				System.currentTimeMillis());
+	}
 
 	@GetMapping("/retry/{delay}/{faultPercent}")
 	public String retry(@PathVariable int delay, @PathVariable int faultPercent) {

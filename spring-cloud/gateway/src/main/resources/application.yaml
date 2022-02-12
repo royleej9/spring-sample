@@ -36,8 +36,6 @@ spring:
         uri: lb://CATALOG-API
         predicates:
           - Path=/catalogs/**
-        filters:
-        - PrefixPath=/api
 
 
       

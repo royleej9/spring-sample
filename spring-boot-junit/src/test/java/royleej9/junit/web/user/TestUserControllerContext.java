@@ -38,7 +38,7 @@ import royleej9.junit.web.user.config.TestUserConfig;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = TestUserConfig.class)
-public class TestUserControllerContext {
+class TestUserControllerContext {
     @Autowired
     private MockMvc mockMvc;
 
@@ -66,7 +66,7 @@ public class TestUserControllerContext {
     }
 
     @Test
-    public void testGetUsers() throws Exception {
+    void testGetUsers() throws Exception {
         // when // then
         // @formatter:off
         this.mockMvc.perform(get("/users")
@@ -76,7 +76,7 @@ public class TestUserControllerContext {
     }
 
     @Test
-    public void testGetUsersResult() throws Exception {
+    void testGetUsersResult() throws Exception {
         // when // then
         // @formatter:off
         MvcResult result = this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))

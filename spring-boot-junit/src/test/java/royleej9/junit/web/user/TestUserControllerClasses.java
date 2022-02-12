@@ -37,9 +37,9 @@ import lombok.extern.slf4j.Slf4j;
 @MapperScan("royleej9.junit.web.user")
 @AutoConfigureMybatis
 @EnableAutoConfiguration
-@SpringBootTest(classes= {UserController.class, UserService.class})
+@SpringBootTest(classes = { UserController.class, UserService.class })
 @AutoConfigureMockMvc
-public class TestUserControllerClasses {
+class TestUserControllerClasses {
     @Autowired
     private MockMvc mockMvc;
 
@@ -53,11 +53,11 @@ public class TestUserControllerClasses {
                            .createdDate(new Timestamp(System.currentTimeMillis()))
                            .build();
     // @formatter:on
-    
+
     @BeforeEach
     public void setup() throws Exception {
         String param = objectMapper.writeValueAsString(user1);
-        
+
         // @formatter:off
         this.mockMvc.perform(post("/users")
                     .contentType(MediaType.APPLICATION_JSON).content(param))
@@ -67,7 +67,7 @@ public class TestUserControllerClasses {
     }
 
     @Test
-    public void testGetUsers() throws Exception {
+    void testGetUsers() throws Exception {
         // when // then
         // @formatter:off
         this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))

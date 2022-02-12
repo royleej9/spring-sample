@@ -25,6 +25,10 @@ public class CustomerApiService {
 //		return restTemplate.getForObject("http://localhost:8085/customers/" + customerId, String.class);
 		return restTemplate.getForObject("http://customer-api/customers/" + customerId, String.class);
 	}
+	
+	public String getCustomerInfoDelay(int delay) {
+		return restTemplate.getForObject("http://customer-api/customers/delay/" + delay, String.class);
+	}
 
 	// DiscoveryClient 직접 사용 할 경우 개발자가 Eureka에 등록된 서비스 리스트를 조회 및 선택 후 URL을 직접 만들어야 함
 	public String getCustomerDetailRaw(String customerId) {

@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TestUserController {
+class TestUserController {
     @Autowired
     private MockMvc mockMvc;
 
@@ -61,7 +61,7 @@ public class TestUserController {
     }
 
     @Test
-    public void testGetUsers() throws Exception {
+    void testGetUsers() throws Exception {
         // when // then
         // @formatter:off
         this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
@@ -71,7 +71,7 @@ public class TestUserController {
     }
 
     @Test
-    public void testGetUsersResult() throws Exception {
+    void testGetUsersResult() throws Exception {
         // when // then
         // @formatter:off
         MvcResult result = this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))

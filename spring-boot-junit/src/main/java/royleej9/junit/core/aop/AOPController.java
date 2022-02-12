@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class AOPController {
 
-	@Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
-	public void restController() {
-	}
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+    public void restController() {
+    }
 
-	@Before("restController()")
-	public void before() {
-		log.info("before==================================================");
-	}
+    @Before("restController()")
+    public void before() {
+        log.info("before==================================================");
+    }
 }

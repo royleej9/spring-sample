@@ -1,5 +1,6 @@
 HELP.md
 /target/
+/bin/
 /.mvn/
 .attach_pid5249
 

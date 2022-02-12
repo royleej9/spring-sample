@@ -2,6 +2,7 @@ package royleej9.junit.web.user;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 //@RunWith(JUnitPlatform.class)
-public class TestUserServiceMockAnswer {
+class TestUserServiceMockAnswer {
 
 	// https://www.baeldung.com/mockito-annotations
 
@@ -89,14 +90,14 @@ public class TestUserServiceMockAnswer {
 	}
 
 	@Test
-	public void testGetUserInfo1() throws Exception {
+	void testGetUserInfo1() throws Exception {
 		log.info("testGetUserInfo1");
 
 		doReturn(Arrays.asList(user1)).when(userMapper).getUsers(user1);
 
 		final List<User> users = userService.getUsers(user1);
 		assertThat(users.size(), is(1));
-		assertTrue(users.get(0).getId().equals(user1.getId()));
+		assertEquals(user1.getId(), users.get(0).getId());
 	}
 
 //    @Test
@@ -108,7 +109,7 @@ public class TestUserServiceMockAnswer {
 //    }
 
 	@Test
-	public void testInsertUser() throws Exception {
+	void testInsertUser() throws Exception {
 		log.info("testInsertUser");
 
 		// given
@@ -123,7 +124,7 @@ public class TestUserServiceMockAnswer {
 	}
 
 	@Test
-	public void testInsertUserDupli() throws Exception {
+	void testInsertUserDupli() throws Exception {
 		log.info("testInsertUserDupli");
 		final boolean isAdded = userService.insertUser(user1);
 		assertFalse(isAdded);

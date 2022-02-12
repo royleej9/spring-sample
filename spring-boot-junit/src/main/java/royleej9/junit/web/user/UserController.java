@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,22 +24,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/users", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+    @GetMapping(value = "/users")
     public List<User> getUsers() {
-        List<User> users = userService.getUsers(null);
-        return users;
+        return userService.getUsers(null);
     }
 
-    @GetMapping(value = "/users/{userId}", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+    @GetMapping(value = "/users/{userId}")
     public List<User> getUsersById(@PathVariable String userId) {
-        List<User> users = userService.getUsers(User.builder().id(userId).build());
-        return users;
+        return userService.getUsers(User.builder().id(userId).build());
     }
 
-    @PostMapping(value = "/users", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+    @PostMapping(value = "/users")
     public ResponseEntity<String> addUser(@RequestBody User user) {
-        boolean isResult = userService.insertUser(user);
+        userService.insertUser(user);
 
-        return new ResponseEntity<String>("success", HttpStatus.OK);
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

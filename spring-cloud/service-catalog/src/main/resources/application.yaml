@@ -1,6 +1,12 @@
 server:
   address: 127.0.0.1
   port: 8081
+  tomcat:
+    accept-count: 4
+    threads:
+      max: 3
+      min-spare: 3 
+   
 
 spring:
   application:
@@ -43,17 +49,17 @@ resilience4j.circuitbreaker:
     default:
       slidingWindowType: COUNT_BASED
 #      slidingWindowSize: 100  
-      failureRateThreshold: 50 
+#      failureRateThreshold: 50 
 #      slowCallRateThreshold: 1
-      slidingWindowSize: 3
-      waitDurationInOpenState: 5000 # OPEN > Half-Open 상태로 변경되기전 기다리는 시간 / 변경전 까지 호출 실패/ 지정된 시간을 넘어서 호출이 있을때 HALF_OPEN으로 변경
+#      slidingWindowSize: 3
+#      waitDurationInOpenState: 5000 # OPEN > Half-Open 상태로 변경되기전 기다리는 시간 / 변경전 까지 호출 실패/ 지정된 시간을 넘어서 호출이 있을때 HALF_OPEN으로 변경
 #      automaticTransitionFromOpenToHalfOpenEnabled: true
       
       # Half-Open 상태일때 허용되는 호출 수 / 실패율을 넘으면 다시 Open 낮으면 Close
-      permittedNumberOfCallsInHalfOpenState: 10
+#      permittedNumberOfCallsInHalfOpenState: 10
       
 #      minimumNumberOfCalls: 2 # 실패율을 계산할때 필요한 최소한의 호출 수 slidingWindowSize보다 커야 함
-      maxWaitDurationInHalfOpenState: 5000
+#      maxWaitDurationInHalfOpenState: 5000
       
 #      permittedNumberOfCallsInHalfOpenState: 10
 #      waitDurationInOpenState: 10000
@@ -78,15 +84,27 @@ resilience4j.timelimiter:
     cbService:
       baseConfig: default
       
-resilience4j.bulkhead:
-  configs:
-    default:
-      maxConcurrentCalls: 5
-      maxWaitDuration: 0
-  instances:
-    cbService:
-      baseConfig: default      
-      
+#resilience4j.bulkhead:
+#  configs:
+#    default:
+#      maxConcurrentCalls: 2
+#      maxWaitDuration: 0
+#  instances:
+#    cbService:
+#      baseConfig: default      
+
+resilience4j.thread-pool-bulkhead:
+    configs:
+      default:
+        maxThreadPoolSize: 6
+        coreThreadPoolSize: 3
+        queueCapacity: 1
+#        keepAliveDuration: 1
+    instances:
+      cbService:
+        baseConfig: default      
+            
+
 
 #resilience4j.ratelimiter:
 #  configs:

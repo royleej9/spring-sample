@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SpringBootTest
 @WebMvcTest(UserController.class)
-public class TestUserControllerWebMVC {
+class TestUserControllerWebMVC {
 
     @MockBean
     private UserService userService;
@@ -53,49 +53,45 @@ public class TestUserControllerWebMVC {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    final User user1 = User.builder()
-            .id("id1")
-            .name("test1")
-            .password("pwd123")
-            .createdDate(new Timestamp(System.currentTimeMillis()))
-            .build();
+    final User user1 = User.builder().id("id1").name("test1").password("pwd123")
+            .createdDate(new Timestamp(System.currentTimeMillis())).build();
 
-    final User user2 = User.builder()
-            .id("id2")
-            .name("test2")
-            .password("pwd321")
-            .createdDate(new Timestamp(System.currentTimeMillis()))
-            .build();
+    final User user2 = User.builder().id("id2").name("test2").password("pwd321")
+            .createdDate(new Timestamp(System.currentTimeMillis())).build();
 
     @BeforeEach
     public void setup() throws Exception {
     }
 
     @Test
-    public void testGetUsers() throws Exception {
+    void testGetUsers() throws Exception {
         // given
         when(userService.getUsers(null)).thenReturn(Arrays.asList(user1, user2));
 
         // when // then
+        // @formatter:off
         this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andDo(print());
+        // @formatter:on
     }
 
     @Test
-    public void testGetUsersResult() throws Exception {
+    void testGetUsersResult() throws Exception {
         List<User> users = Arrays.asList(user1, user2);
 
         // given
         given(userService.getUsers(null)).willReturn(users);
 
         // when // then
+        // @formatter:off
         MvcResult result = this.mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andDo(print())
                 .andReturn();
+        // @formatter:on
 
         String stringResult = result.getResponse().getContentAsString();
         log.info(stringResult);

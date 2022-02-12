@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @ExtendWith(MockitoExtension.class)
 //@RunWith(JUnitPlatform.class)
 @ExtendWith(SpringExtension.class)
-public class TestUserServiceMock {
+class TestUserServiceMock {
 
     // https://www.baeldung.com/mockito-annotations
     @Mock
@@ -58,7 +58,7 @@ public class TestUserServiceMock {
     }
 
     @Test
-    public void testGetUserInfo1() throws Exception {
+    void testGetUserInfo1() throws Exception {
         log.info("testGetUserInfo1");
 
         doReturn(Arrays.asList(user1)).when(userMapper).getUsers(user1);
@@ -69,7 +69,7 @@ public class TestUserServiceMock {
     }
 
     @Test
-    public void testGetUserAll() throws Exception {
+    void testGetUserAll() throws Exception {
         log.info("testGetUserAll");
 
         List<User> users = new ArrayList<User>();
@@ -82,7 +82,7 @@ public class TestUserServiceMock {
     }
 
     @Test
-    public void testInsertUser() throws Exception {
+    void testInsertUser() throws Exception {
         log.info("testInsertUser");
 
         // userMapper
@@ -98,7 +98,7 @@ public class TestUserServiceMock {
     }
 
     @Test
-    public void testInsertUserDupli() throws Exception {
+    void testInsertUserDupli() throws Exception {
         log.info("testInsertUserDupli");
         doReturn(Arrays.asList(user3)).when(userMapper).getUsers(any(User.class));
         final boolean isAdded = userService.insertUser(user3);
