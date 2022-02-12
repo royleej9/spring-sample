@@ -11,7 +11,3 @@
 
 ## spring-json-sample
 
-x
-
-
-
