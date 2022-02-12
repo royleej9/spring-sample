@@ -10,5 +10,3 @@
 ## spring-boot-web
 
 ## spring-json-sample
-
-테스트
