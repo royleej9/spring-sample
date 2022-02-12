@@ -17,55 +17,55 @@ import reactor.core.publisher.Mono;
 @Service
 public class CBService {
 
-	private final Logger logger = LoggerFactory.getLogger(CBService.class);
+    private final Logger logger = LoggerFactory.getLogger(CBService.class);
 
-	private static final String CB_SERVICE = "cbService";
+    private static final String CB_SERVICE = "cbService";
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
 //	@Autowired
 //	private WebClient.Builder webClientBuilder;
 
-	public String testOK(int customerId) {
+    public String testOK(int customerId) {
 
-		logger.info("testOK : " + customerId);
-		sleep(customerId * 1000);
-		logger.info("testOK-end :  " + customerId);
-		return "testOK!!!!";
-	}
+        logger.info("testOK : " + customerId);
+        sleep(customerId * 1000);
+        logger.info("testOK-end :  " + customerId);
+        return "testOK!!!!";
+    }
 
-	@Bulkhead(name = CB_SERVICE, type = Type.THREADPOOL, fallbackMethod = "fallback")
+    @Bulkhead(name = CB_SERVICE, type = Type.THREADPOOL, fallbackMethod = "fallback")
 //	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallback")
-	public String testError(int customerId) {
+    public String testError(int customerId) {
 
-		logger.info("testError : " + customerId);
-		sleep(customerId * 1000);
+        logger.info("testError : " + customerId);
+        sleep(customerId * 1000);
 
-		logger.info("testError-end :  " + customerId);
+        logger.info("testError-end :  " + customerId);
 //		if (customerId > 5) {
 //			List a = null;
 //			a.get(10);
 //		}
 //		return restTemplate.getForObject("http://fall-api/customers/" + customerId, String.class);
-		return "success!!!!";
-	}
+        return "success!!!!";
+    }
 
 //	@TimeLimiter(name = CB_SERVICE)
-	@Bulkhead(name = CB_SERVICE, type = Type.THREADPOOL)
-	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackNonReactiveTimeLimiter")
-	public CompletableFuture<String> timeoutNonReactive(int delay, int faultPercent) {
-		logger.info("timeoutNonReactive : " + delay);
-		Try.run(() -> Thread.sleep(delay * 1000));
-		logger.info("timeoutNonReactive-end :  " + delay);
+    @Bulkhead(name = CB_SERVICE, type = Type.THREADPOOL)
+    @CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackNonReactiveTimeLimiter")
+    public CompletableFuture<String> timeoutNonReactive(int delay, int faultPercent) {
+        logger.info("timeoutNonReactive : " + delay);
+        Try.run(() -> Thread.sleep(delay * 1000));
+        logger.info("timeoutNonReactive-end :  " + delay);
 
-		return CompletableFuture.completedFuture("test");
+        return CompletableFuture.completedFuture("test");
 
 //		System.out.println("timeoutNonReactive");
 //		String url = "http://customer-api/customers/retry/" + delay + "/" + faultPercent;
 //		String result = restTemplate.getForObject(url, String.class);
 //		return CompletableFuture.completedFuture(result);
-	}
+    }
 
 //	@TimeLimiter(name = CB_SERVICE)
 //	@CircuitBreaker(name = CB_SERVICE, fallbackMethod = "fallbackReactiveTimeLimiter")
@@ -76,50 +76,50 @@ public class CBService {
 //				.map(greeting -> String.format("%s", greeting));
 //	}
 
-	// @CircuitBreaker 실패시 호출되는 메소드
-	@SuppressWarnings("unused")
-	private String fallback(int customerId, IllegalStateException ex) {
-		String message = "fallback-IllegalStateException: " + ex.getMessage() + System.currentTimeMillis();
-		System.out.println(message);
-		return message;
-	}
+    // @CircuitBreaker 실패시 호출되는 메소드
+    @SuppressWarnings("unused")
+    private String fallback(int customerId, IllegalStateException ex) {
+        String message = "fallback-IllegalStateException: " + ex.getMessage() + System.currentTimeMillis();
+        System.out.println(message);
+        return message;
+    }
 
-	// @CircuitBreaker 실패시 호출되는 메소드
-	@SuppressWarnings("unused")
-	private String fallback(int customerId, Exception ex) {
-		String message = "fallback-Exception: " + ex.getMessage() + System.currentTimeMillis();
-		System.out.println(message);
-		return message;
-	}
+    // @CircuitBreaker 실패시 호출되는 메소드
+    @SuppressWarnings("unused")
+    private String fallback(int customerId, Exception ex) {
+        String message = "fallback-Exception: " + ex.getMessage() + System.currentTimeMillis();
+        System.out.println(message);
+        return message;
+    }
 
-	// @CircuitBreaker 실패시 호출되는 메소드
-	@SuppressWarnings("unused")
-	private String fallback(int customerId, RuntimeException ex) {
-		String message = "fallback-RuntimeException: " + ex.getMessage() + System.currentTimeMillis();
-		System.out.println(message);
-		return message;
-	}
+    // @CircuitBreaker 실패시 호출되는 메소드
+    @SuppressWarnings("unused")
+    private String fallback(int customerId, RuntimeException ex) {
+        String message = "fallback-RuntimeException: " + ex.getMessage() + System.currentTimeMillis();
+        System.out.println(message);
+        return message;
+    }
 
-	// @TimeLimiter 실패시 호출되는 메소드
-	@SuppressWarnings("unused")
-	private CompletableFuture<String> fallbackNonReactiveTimeLimiter(int delay, int faultPercent, Exception ex) {
-		return CompletableFuture
-				.completedFuture("CompletableFuture-fallbackNonReactiveTimeLimiter" + System.currentTimeMillis());
-	}
+    // @TimeLimiter 실패시 호출되는 메소드
+    @SuppressWarnings("unused")
+    private CompletableFuture<String> fallbackNonReactiveTimeLimiter(int delay, int faultPercent, Exception ex) {
+        return CompletableFuture
+                .completedFuture("CompletableFuture-fallbackNonReactiveTimeLimiter" + System.currentTimeMillis());
+    }
 
-	// @TimeLimiter 실패시 호출되는 메소드
-	@SuppressWarnings("unused")
-	private Mono<String> fallbackReactiveTimeLimiter(int delay, int faultPercent, Exception ex) {
-		return Mono.just("fallbackReactiveTimeLimiter" + System.currentTimeMillis());
-	}
+    // @TimeLimiter 실패시 호출되는 메소드
+    @SuppressWarnings("unused")
+    private Mono<String> fallbackReactiveTimeLimiter(int delay, int faultPercent, Exception ex) {
+        return Mono.just("fallbackReactiveTimeLimiter" + System.currentTimeMillis());
+    }
 
-	private void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    private void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-	}
+    }
 }

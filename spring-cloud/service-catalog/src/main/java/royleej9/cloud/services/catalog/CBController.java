@@ -35,7 +35,7 @@ public class CBController {
 		
 		return cbService.timeoutNonReactive(delay, faultPercent);
 	}
-//
+
 //	// timeout-Reactive 스타일이 경우
 //	@GetMapping("/timeout/reactive/{delay}/{faultPercent}")
 //	public Mono<String> timeoutReactive(@PathVariable int delay, @PathVariable int faultPercent) {

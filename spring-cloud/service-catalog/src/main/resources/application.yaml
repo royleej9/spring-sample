@@ -11,38 +11,14 @@ server:
 spring:
   application:
     name: catalog-api
-  cloud:
-    loadbalancer:
-      configurations: request-based-sticky-session
-      sticky-session:
-        add-service-instance-cookie: true
-      stats:
-        micrometer:
-          enabled: true
 
 eureka:
   instance:
-    appname: catalog-api
     prefer-ip-address: true
     ip-address: ${server.address}
-    metadata-map:
-      isAutoIncludeGateway: 'false'
   client:
     serviceUrl:
-      defaultZone: http://192.168.56.1:8761/eureka, http://172.23.32.1:8762/eureka, http://172.28.96.1:8763/eureka
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-        - '*'
-  health:
-    circuitbreakers:
-      enabled: true
-    ratelimiters:
-      enabled: true
-
+      defaultZone: http://192.168.56.1:8761/eureka, http://192.168.119.1:8762/eureka, http://192.168.149.1:8763/eureka
 
 resilience4j.circuitbreaker:
   configs:
@@ -65,13 +41,9 @@ resilience4j.circuitbreaker:
 #      waitDurationInOpenState: 10000
 #      eventConsumerBufferSize: 10
       registerHealthIndicator: true
-#    someShared:
-#      slidingWindowSize: 50
-#      permittedNumberOfCallsInHalfOpenState: 10
   instances:
     customerService:
       baseConfig: default
-#      waitDurationInOpenState: 5000
 
 resilience4j.timelimiter:
   configs:
@@ -124,6 +96,14 @@ resilience4j.thread-pool-bulkhead:
 #customer:
 #  ribbon:
 #    listOfServers: localhost:8085
+resilience4j.bulkhead:
+  configs:
+    default:
+      maxConcurrentCalls: 5
+      maxWaitDuration: 0
+  instances:
+    cbService:
+      baseConfig: default
 ---
 # standalone
 spring:

@@ -5,7 +5,7 @@ eureka:
     prefer-ip-address: true
   client:
     serviceUrl:
-      defaultZone: http://180.237.10.240:8761/eureka, http://172.27.128.1:8762/eureka/, http://200.100.1.126:8763/eureka/
+      defaultZone: http://192.168.56.1:8761/eureka, , http://192.168.119.1:8762/eureka, http://192.168.119.1:8763/eureka
 #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 ---
@@ -37,11 +37,11 @@ spring:
 #  cloud:
 #    inetutils:
 #      preferred-networks:
-#      - 180.237.10.240
+#      - 192.168.56.1
 
 eureka:
   instance:
-    ip-address: 180.237.10.240
+    ip-address: 192.168.56.1
 #    hostname: 180.237.10.240
 #    prefer-ip-address: true
     
@@ -55,12 +55,12 @@ spring:
 #  cloud:
 #    inetutils:
 #      preferred-networks:
-#      - 172.27.128.1
+#      - 192.168.119.1
       
 eureka:
   instance:
-    ip-address: 172.27.128.1
-#    hostname: 172.27.128.1
+    ip-address: 192.168.119.1
+#    hostname: 192.168.119.1
 #    prefer-ip-address: true
 
 ---
@@ -73,10 +73,10 @@ spring:
 #  cloud:
 #    inetutils:
 #      preferred-networks:
-#      - 200.100.1.126
+#      - 192.168.119.1
 
 eureka:
   instance:
-    ip-address: 200.100.1.126
-#    hostname: 200.100.1.126
+    ip-address: 192.168.119.1
+#    hostname: 192.168.119.1
 #    prefer-ip-address: true

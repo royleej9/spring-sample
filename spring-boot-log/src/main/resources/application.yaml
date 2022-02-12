@@ -1,0 +1,19 @@
+# default
+spring.application.name: logbak-default
+server.port: 8081
+
+---
+# spring.profiles.active=dev
+spring.application.name: logbak-dev
+server:
+  port: 8443
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
+# spring.profiles.active=prod
+spring.application.name: logbak-prod
+server.port: 8080
+spring.config.activate.on-profile: prod
