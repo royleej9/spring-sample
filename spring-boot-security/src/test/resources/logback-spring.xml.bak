@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include
+		resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<appender name="CONSOLE"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>
+			%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] -%msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+
+	<logger name="org.springframework" level="error" />
+
+	<logger name="org.springframework.core" level="error" />
+	<logger name="org.springframework.beans" level="error" />
+	<logger name="org.springframework.context" level="error" />
+	<logger name="org.springframework.transaction" level="error" />
+	<logger name="org.springframework.web" level="error" />
+	<logger name="org.springframework.test" level="error" />
+	<logger name="org.hibernate" level="error" />
+</configuration>

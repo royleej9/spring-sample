@@ -14,11 +14,12 @@ import org.springframework.test.context.ActiveProfiles;
 import roylee.sample.security.entity.Role;
 
 @DisplayName("Role 테스트 - Real db")
-@Rollback(false)
 @DataJpaTest
+@Rollback(false)
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class RoleRepositoryRealDbTest {
+	
 	// @formatter:off	
 	@Autowired
 	RoleRepository roleRepository;
@@ -28,10 +29,10 @@ class RoleRepositoryRealDbTest {
 	void test_1() {
 		// given
 		Role role = Role.builder()
-						.name("ROLE_USER")
+						.name("ROLE_USER_1")
 						.description("사용자")
 						.build();
-		// when/then
+//		// when/then
 		assertNotNull(roleRepository.save(role), "Role 등록 테스트");
 		assertNotNull(roleRepository.findOneByName("ROLE_USER"), "Role 검색 테스트");
 	}

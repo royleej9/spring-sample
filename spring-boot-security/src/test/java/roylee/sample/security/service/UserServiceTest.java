@@ -8,7 +8,6 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -16,18 +15,16 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import roylee.sample.security.entity.Role;
 import roylee.sample.security.entity.User;
 import roylee.sample.security.repository.RoleRepository;
 
 @DisplayName("UserDetailsServiceEx - EntityManager")
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles("test")
-@Import(UserDetailsServiceEx.class)
-class UserDetailsServiceExTest {
+@Import( value = {UserService.class, TestService.class})
+class UserServiceTest {
 
     @Autowired
     TestEntityManager testEntityManager;
@@ -36,8 +33,11 @@ class UserDetailsServiceExTest {
     RoleRepository roleRepository;
     
     @Autowired
-    UserDetailsServiceEx userDetailsServiceEx;
-	
+    UserService userService;
+    
+    @Autowired
+    TestService testService;
+    
 	@BeforeEach
 	void init() {
 		var userRole = Role.builder()
@@ -67,7 +67,7 @@ class UserDetailsServiceExTest {
 	void test_1() {
 		
 		// when
-		UserDetails user = userDetailsServiceEx.loadUserByUsername("admin");
+		UserDetails user = userService.loadUserByUsername("admin");
 		
 		// then
 		assertEquals("admin", user.getUsername());
@@ -78,7 +78,7 @@ class UserDetailsServiceExTest {
 	@Test
 	void test_2() {
 		assertThrows(UsernameNotFoundException.class, () -> {
-			userDetailsServiceEx.loadUserByUsername("unknownUser");			
+			userService.loadUserByUsername("unknownUser");			
 		});		
 	}
 }

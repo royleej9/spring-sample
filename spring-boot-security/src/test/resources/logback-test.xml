@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- https://stackoverflow.com/questions/35232827/spring-boot-unit-test-ignores-logging-level -->
+
+	<statusListener
+		class="ch.qos.logback.core.status.NopStatusListener" />
+	<include
+		resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<logger name="ch.qos.logback" level="error" />
+	<logger name="org.springframework" level="error" />
+
+	<!-- <logger name="org.springframework.core " level="error" /> -->
+	<!-- <logger name="org.springframework.beans" level="error" /> -->
+	<!-- <logger name="org.springframework.context" level="error" /> -->
+	<!-- <logger name="org.springframework.transaction" level="error" /> -->
+	<!-- <logger name="org.springframework.web" level="error" /> -->
+	<!-- <logger name="org.springframework.test" level="error" /> -->
+	<logger name="org.hibernate" level="error" />
+</configuration>

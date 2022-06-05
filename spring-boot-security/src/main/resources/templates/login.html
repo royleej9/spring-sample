@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head lang="ko">
+<title>Login page</title>
+</head>
+<body>
+	<h1>Login page</h1>
+	<p th:if="${param.error}" class="error">Wrong user or password</p>
+	<form th:action="@{/login}" method="post">
+		<label for="id">id</label>: <input type="text"
+			id="id" name="id" autofocus="autofocus" /> <br /> 
+		<label
+			for="password">Password</label>: <input type="password" id="password"
+			name="password" /> <br /> <input type="submit" value="Log in" />
+	</form>
+</body>
+</html>
+

@@ -1,10 +1,13 @@
 package roylee.sample.security.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,13 +26,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
-	
+public class User implements Serializable {
+	private static final long serialVersionUID = -8279003840342903928L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(nullable = false, updatable = false)
@@ -49,7 +53,7 @@ public class User {
 
 	@Builder.Default
 	@Column(nullable = false)
-	private boolean enabled = true;
+	private boolean disabled = false;
 
 	@CreationTimestamp
 	@Column(nullable = false, updatable = false)
@@ -58,14 +62,25 @@ public class User {
 	@UpdateTimestamp
 	@Column(nullable = false)
 	private LocalDateTime updated;
-	
-	@ManyToMany
-	@JoinTable(
-            name = "users_roles", 
-            joinColumns = @JoinColumn(
-              name = "user_no", referencedColumnName = "userNo"), 
-            inverseJoinColumns = @JoinColumn(
-              name = "role_id", referencedColumnName = "id")
-			)
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_no", referencedColumnName = "userNo"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Collection<Role> roles;
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(userId, userNo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(userId, other.userId) && userNo == other.userNo;
+	}
 }
