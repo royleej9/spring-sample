@@ -8,16 +8,16 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class WebSecurityConfig {
 
-	@Bean
-	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-		// @formatter:off
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        // @formatter:off
 		http.csrf().disable()
-			.authorizeExchange()
-//            .pathMatchers(HttpMethod.POST, "/employees/update").hasRole("ADMIN")
-		    .pathMatchers("/**").permitAll()
+		    .authorizeExchange()
+//              .pathMatchers(HttpMethod.POST, "/employees/update").hasRole("ADMIN")
+		        .pathMatchers("/**").permitAll()
 		    .and()
-		    	.httpBasic();
+		        .httpBasic();
 		return http.build();
 		// @formatter:on
-	}
+    }
 }
