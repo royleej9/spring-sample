@@ -1,11 +1,6 @@
 package royleej9.webflux.app;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -17,25 +12,30 @@ import reactor.core.publisher.Mono;
 public class AuthController {
 
     @PostMapping(value = "/auth/login")
-    public Mono<String> login(ServerWebExchange exchange) {    
-        return exchange.getFormData()
-                .flatMap(formData -> {
-                  String id = formData.getFirst("id");
-                  String password = formData.getFirst("password");
-                  log.info("{} : {}", id, password);
-                  return Mono.empty().thenReturn("redirect:/main");
-                });
-        
-//        Mono<MultiValueMap<String, String>> data = exchange.getFormData();
-//        return data.map(formData -> {
-//            String id = formData.getFirst("id");
-//            String password = formData.getFirst("password");
-//            return Mono.just("Just Hello");
-//        }).thenReturn("redirect:/main");
-//        return data.thenReturn("redirect:/main");
-//        return Mono.empty().thenReturn("redirect:/main");
+    public Mono<String> login(ServerWebExchange exchange) {
+        return exchange.getFormData().flatMap(formData -> {
+            String id = formData.getFirst("id");
+            String password = formData.getFirst("password");
+            log.info("{} : {}", id, password);
+
+//            String user = findUserById(id)
+//            if (user.isEmpty() ) {
+//                return Mono.empty().thenReturn("redirect:/?error");
+//            } else {
+//                return Mono.empty().thenReturn("redirect:/main");
+//            }
+//            
+            return findUserById(id)
+                    .map(x -> "redirect:/main")
+                    .switchIfEmpty(Mono.just("redirect:/?error"));
+        }).log();
     }
-    
+
+    private Mono<String> findUserById(String id) {
+        log.info("findUserById");
+        return id.equals("admin") ? Mono.just("admin") : Mono.empty();
+    }
+
 //    @PostMapping(value = "/auth/login", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE })
 //    public Mono<ResponseEntity<String>> login(ServerWebExchange exchange) {
 //        Mono<MultiValueMap<String, String>> data = exchange.getFormData();
